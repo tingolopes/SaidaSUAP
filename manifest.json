@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Saída estimada SUAP",
+  "version": "1.0",
+  "description": "Extensão para demonstrar o horário de saída estimada do servidor",
+    "content_scripts": [
+    {
+      "matches": [
+        "https://suap.ifms.edu.br/"
+      ],
+      "js": [
+        "script.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}
