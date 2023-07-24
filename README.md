@@ -1,6 +1,6 @@
 # SaidaSUAP
 
-![imagem de exemplo](https://github.com/tingolopes/SaidaSUAP/blob/main/image.jpg)
+![imagem de exemplo](https://github.com/tingolopes/SaidaSUAP/blob/main/images/exemplos.jpg)
 
 Extensão para demonstrar o horário de saída estimada do servidor
 Essa simples extensão apenas captura o total trabalhado e calcula o tempo estimado de saída do servidor.
@@ -21,4 +21,4 @@ Para testar essa extensão em seu navegador, execute os seguintes passos!
 
 Vá até a opção de extensões do Google Chrome, clique no botão "Carregar sem compactação", escolha a pasta que contem os arquivos da extensão e clique em "Selecionar pasta"
 
-![como instalar](https://github.com/tingolopes/SaidaSUAP/blob/main/1.png)
+![como instalar](https://github.com/tingolopes/SaidaSUAP/blob/main/images/instalacao.png)
