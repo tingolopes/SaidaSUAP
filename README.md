@@ -15,3 +15,10 @@ Amarelo: Faltam menos de 15 minutos
 Vermelho: 8 Horas de trabalho já atingidas
 
 Ela está habilitada para o SUAP do IFMS mas pode ser ajustada para SUAP's de outras unidades caso necessário.
+
+## Como instalar e testar
+Para testar essa extensão em seu navegador, execute os seguintes passos!
+
+Vá até a opção de extensões do Google Chrome, clique no botão "Carregar sem compactação", escolha a pasta que contem os arquivos da extensão e clique em "Selecionar pasta"
+
+![como instalar](https://github.com/tingolopes/SaidaSUAP/blob/main/1.jpg)
