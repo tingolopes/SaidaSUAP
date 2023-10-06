@@ -1,6 +1,6 @@
 # SaidaSUAP
 
-![imagem de exemplo](https://github.com/tingolopes/SaidaSUAP/blob/main/images/exemplos.jpg)
+![imagem de exemplo](https://github.com/tingolopes/SaidaSUAP/blob/main/images/exemplo_tela_principal.jpg)
 
 Extensão para demonstrar o horário de saída estimada do servidor
 Essa simples extensão apenas captura o total trabalhado e calcula o tempo estimado de saída do servidor.
@@ -15,6 +15,10 @@ Amarelo: Faltam menos de 15 minutos
 Vermelho: 8 Horas de trabalho já atingidas
 
 Ela está habilitada para o SUAP do IFMS mas pode ser ajustada para SUAP's de outras unidades caso necessário.
+
+Ela também mostra o local do registro do ponto.
+
+![imagem de exemplo 2](https://github.com/tingolopes/SaidaSUAP/blob/main/images/exemplo_tela_frequencia.jpg)
 
 ## Como instalar e testar
 Para testar essa extensão em seu navegador, execute os seguintes passos!
