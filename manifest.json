@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Saída estimada SUAP",
-  "version": "1.0",
-  "description": "Extensão para demonstrar o horário de saída estimada do servidor, bem como apresentar o local em que o ponto foi 'batido' e as observações registradas na folha de frequência",
+  "version": "1.1",
+  "description": "Extensão para mostrar horário de saída do servidor, local 'batido' e observações na folha de frequência",
   "icons":{
     "257": "favicons/favicon.png"
   },

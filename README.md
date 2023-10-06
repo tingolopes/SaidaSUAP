@@ -20,9 +20,5 @@ Ela também mostra o local do registro do ponto.
 
 ![imagem de exemplo 2](https://github.com/tingolopes/SaidaSUAP/blob/main/images/exemplo_tela_frequencia.png)
 
-## Como instalar e testar
-Para testar essa extensão em seu navegador, execute os seguintes passos!
-
-Vá até a opção de extensões do Google Chrome, clique no botão "Carregar sem compactação", escolha a pasta que contem os arquivos da extensão e clique em "Selecionar pasta"
-
-![como instalar](https://github.com/tingolopes/SaidaSUAP/blob/main/images/instalacao.png)
+## Como instalar
+Essa extensão é mantida no Chrome Web Store. Para instalá-la [clique aqui](https://chrome.google.com/webstore/detail/sa%C3%ADda-estimada-suap/pcpobpkgpekobmddpfhcbmcflppabopp?utm_source=ext_app_menu)
