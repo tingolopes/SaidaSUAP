@@ -18,7 +18,7 @@ Ela está habilitada para o SUAP do IFMS mas pode ser ajustada para SUAP's de ou
 
 Ela também mostra o local do registro do ponto.
 
-![imagem de exemplo 2](https://github.com/tingolopes/SaidaSUAP/blob/main/images/exemplo_tela_frequencia.jpg)
+![imagem de exemplo 2](https://github.com/tingolopes/SaidaSUAP/blob/main/images/exemplo_tela_frequencia.png)
 
 ## Como instalar e testar
 Para testar essa extensão em seu navegador, execute os seguintes passos!
