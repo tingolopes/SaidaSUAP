@@ -1,0 +1,64 @@
+form {
+    background-color: #f8f8f8;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    width: 300px;
+    padding: 20px;
+    border: 1px solid #CCC;
+    border-radius: 1em;
+}
+
+label{
+    width: 100%;
+    margin: 10px 0;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+}
+
+#horas-presenciais {
+    width: 100%;
+    padding: 15px;
+    outline: none;
+    border-radius: 15px;
+    border: 1px solid #ddd;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 15px;
+    background-color: #62ebb6;
+    color: white;
+    font-weight: 700;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #4cd3a6;
+}
+
+#intervalo{
+    width: 100%;
+    padding: 15px;
+    outline: none;
+    border-radius: 15px;
+    border: 1px solid #ddd;
+}
+
+form > div{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.logo{
+    width: 150px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
