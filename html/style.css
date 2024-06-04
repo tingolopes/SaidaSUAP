@@ -62,3 +62,23 @@ form > div{
     justify-content: center;
     margin-bottom: 10px;
 }
+
+.other-pages{
+    background-color: #f8f8f8;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    width: 300px;
+    padding: 20px;
+    border: 1px solid #CCC;
+    border-radius: 1em;
+    display: none;
+}
+
+.other-pages > h1, p{
+    width: 100%;
+    margin: 10px 0;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+}

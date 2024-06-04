@@ -1,5 +1,16 @@
+function showOrHidePopup(url) {
+    if (url.includes("https://suap.ifms.edu.br/")) {
+        document.getElementById("other-pages").style.display = "none";
+        document.getElementById("form").style.display = "block";
+    } else {
+        document.getElementById("other-pages").style.display = "block";
+        document.getElementById("form").style.display = "none";
+    }
+}
+
 window.addEventListener("DOMContentLoaded",  async function() {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    showOrHidePopup(tab.url);
     await chrome.scripting.executeScript({
         target: { tabId: tab.id },
         function: getLocalStorage,
