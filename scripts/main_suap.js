@@ -1,132 +1,140 @@
 function main_suap() {
-  // Capturar o elemento dentro da div com a classe "wrapper"
-  // verificar se o elemento class='loader' está com display none para iniciar execução do código
-  const loader = document.querySelector(".loader");
-  if (loader.style.display !== "none") {
-    console.log("Ainda carregando elementos da tela inicial...")
-    setTimeout(main_suap, 1000);
-    return;
-  }
+  console.log("Saída Estimada SUAP: Iniciando busca pelo quadro de Frequências...");
 
-  if (localStorage.getItem("horas-presenciais") === null) {
-    localStorage.setItem("horas-presenciais", "8");
-  }
-  if (localStorage.getItem("soma-intervalo") === null) {
-    localStorage.setItem("soma-intervalo", false);
-  }
-
-  if (document.getElementsByClassName("chrome-extension").length > 0) {
-    let elements = document.getElementsByClassName("chrome-extension");
-    while (elements.length > 0) {
-      elements[0].remove();
+  function horaMinutoSegundoParaSegundos(hora) {
+    if (hora.includes("h")) {
+      const parts = hora.match(/(\d+)h\s*(\d+)min\s*(\d+)seg/);
+      if (parts) return parseInt(parts[1]) * 3600 + parseInt(parts[2]) * 60 + parseInt(parts[3]);
     }
+    const partes = hora.split(":");
+    return (parseInt(partes[0]) || 0) * 3600 + (parseInt(partes[1]) || 0) * 60 + (parseInt(partes[2]) || 0);
   }
 
-  const horasPresenciais = localStorage.getItem("horas-presenciais");
-  const somaIntevalo = localStorage.getItem("soma-intervalo");
-
-  const parentElement = document.querySelector("span[data-quadro='Frequências']").parentElement.nextElementSibling;
-  const parentElementDl = parentElement.querySelector("dl");
-  const referenceNode = parentElement.querySelectorAll("dt")[2];
-  const tempoTrabalhado = parentElement.querySelectorAll("dd")[1].innerText; //total trabalhado hoje em string
-  let jornadaAtingida = false;
-  let limiteAtingido = false;
-
-  const entradasEsaidas = parentElement.querySelectorAll("dd")[0];
-  const registros = Array.from(entradasEsaidas.querySelectorAll("span"));
-
-  registros.forEach(function (span) {
-    if (span.classList.contains("true")) {
-      console.log("Entrada");
-    } else {
-      console.log("Saída");
-    }
-  });
-
-  //console.log(entradasEsaidas.querySelectorAll("span")[0].innerText+":00");
-  //console.log(entradasEsaidas.querySelectorAll("span")[1].innerText+":00");
-  //console.log(entradasEsaidas.querySelectorAll("span")[2].innerText+":00");
-  //console.log(entradasEsaidas.querySelectorAll("span")[3].innerText+":00");
-
-  // Criando o novo item <dt> e definindo seu texto
-  const newDt = document.createElement("dt");
-  newDt.textContent = "Saída Estimada Hoje: ";
-
-  // Criando o novo item <dd> e definindo seu texto e estilos
-  const newDd = document.createElement("dd");
-  newDd.textContent = calculaHoraEstimadaDeSaida(tempoTrabalhado, horasPresenciais, somaIntevalo);
-  newDd.style.backgroundColor = "#8DE2AA"; //verde claro
-  newDd.style.borderRadius = "5px";
-
-  if (limiteAtingido) {
-    newDd.style.backgroundColor = "#FFE9AD"; //amarelo claro
-    if (jornadaAtingida) {
-      newDd.style.backgroundColor = "#F7B6BC"; //vermelho claro
-    }
+  function padZero(num) {
+    if (num < 0) return "00";
+    return num.toString().padStart(2, "0");
   }
 
-  // Inserindo o novo item <dt> antes do nó de referência
-  parentElementDl.insertBefore(newDt, referenceNode);
-  newDt.setAttribute("class", "chrome-extension");
-
-  // Inserindo o novo item <dd> depois do novo item <dt>
-  parentElementDl.insertBefore(newDd, newDt.nextSibling);
-  newDd.setAttribute("class", "chrome-extension");
-
-  function calculaHoraEstimadaDeSaida(totalTrabalhadoHoje, horasPresenciais, somaIntervalo) {
-    let duracaoTotal = horasPresenciais * 60 * 60; // Duração total desejada em segundos (padraão = 8 horas)
-
-    if (entradasEsaidas.querySelectorAll("span").length < 2 && somaIntervalo == "true") {
-      duracaoTotal = duracaoTotal + 60 * 60;
-      console.log("Ainda não fez o intervalo");
+  function calculaHoraEstimadaDeSaida(totalTrabalhadoHoje, horasPresenciais, somaIntervalo, qtdRegistros) {
+    let duracaoTotal = parseFloat(horasPresenciais) * 3600;
+    if (qtdRegistros < 2 && (somaIntervalo === "true" || somaIntervalo === true)) {
+      duracaoTotal += 3600;
     }
-    /* try {
-      console.log(entradasEsaidas.querySelectorAll("span")[1].innerText);
-    } catch {
-      duracaoTotal = duracaoTotal + 60 * 60;
-      console.log("Ainda não fez o intervalo");
-    } */
 
-    const tempoTrabalhadoSegundos =
-      horaMinutoSegundoParaSegundos(totalTrabalhadoHoje);
+    const tempoTrabalhadoSegundos = horaMinutoSegundoParaSegundos(totalTrabalhadoHoje);
     let diferencaSegundos = duracaoTotal - tempoTrabalhadoSegundos;
 
-    if (diferencaSegundos < 900) {
-      console.log("Faltam 15 minutos");
-      limiteAtingido = true;
+    let status = "normal";
+    if (diferencaSegundos < 600) {
+      status = "limite";
       if (diferencaSegundos < 0) {
-        console.log("Hora de sair");
-        jornadaAtingida = true;
+        status = "atingida";
       }
     }
 
     const agora = new Date();
-    const horarioAtualSegundos =
-      agora.getHours() * 3600 + agora.getMinutes() * 60 + agora.getSeconds();
+    const horarioAtualSegundos = agora.getHours() * 3600 + agora.getMinutes() * 60 + agora.getSeconds();
     const horarioEstimadoSegundos = horarioAtualSegundos + diferencaSegundos;
+    
     const horasEstimadas = Math.floor(horarioEstimadoSegundos / 3600);
     const minutosEstimados = Math.floor((horarioEstimadoSegundos % 3600) / 60);
-    const segundosEstimados = horarioEstimadoSegundos % 60;
+    const segundosEstimados = Math.floor(horarioEstimadoSegundos % 60);
 
-    const horaEstimada =
-      padZero(horasEstimadas) +
-      ":" +
-      padZero(minutosEstimados) +
-      ":" +
-      padZero(segundosEstimados);
-    return horaEstimada;
+    const horaFormatada = padZero(horasEstimadas) + ":" + padZero(minutosEstimados) + ":" + padZero(segundosEstimados);
+    return { hora: horaFormatada, status: status };
   }
 
-  function horaMinutoSegundoParaSegundos(hora) {
-    const partes = hora.split(":");
-    const horas = parseInt(partes[0], 10);
-    const minutos = parseInt(partes[1], 10);
-    const segundos = parseInt(partes[2], 10);
+  function injectEstimatedExit() {
+    if (document.getElementsByClassName("chrome-extension").length > 0) {
+      return true; 
+    }
 
-    return horas * 3600 + minutos * 60 + segundos;
+    let tituloFrequencias = document.querySelector("h3[data-quadro='Frequências']");
+    if (!tituloFrequencias) {
+      tituloFrequencias = Array.from(document.querySelectorAll("h3, span, div.titulo")).find(el => 
+        el.textContent.trim().toLowerCase() === "frequências"
+      );
+    }
+
+    if (!tituloFrequencias) return false;
+
+    const modulo = tituloFrequencias.closest(".modulo") || tituloFrequencias.closest(".modulo-info");
+    if (!modulo) return false;
+
+    const parentElementDl = modulo.querySelector("dl");
+    if (!parentElementDl) return false;
+
+    const dts = Array.from(parentElementDl.querySelectorAll("dt"));
+    const dtTotalHoje = dts.find(dt => dt.textContent.includes("Total de Hoje"));
+    if (!dtTotalHoje) return false;
+    
+    const ddTotalHoje = dtTotalHoje.nextElementSibling;
+    if (!ddTotalHoje) return false;
+
+    const tempoTrabalhado = ddTotalHoje.innerText.trim();
+    if (!tempoTrabalhado || tempoTrabalhado === "--:--:--") return false;
+    
+    const dtHoje = dts.find(dt => dt.textContent.trim().startsWith("Hoje"));
+    if (!dtHoje) return false;
+    
+    const ddHoje = dtHoje.nextElementSibling;
+    const registros = Array.from(ddHoje.querySelectorAll("span"));
+
+    chrome.storage.local.get(["horas-presenciais", "soma-intervalo"], function(result) {
+      const horasPresenciais = result["horas-presenciais"] || "8";
+      const somaIntevalo = result["soma-intervalo"] || "false";
+
+      const resultado = calculaHoraEstimadaDeSaida(tempoTrabalhado, horasPresenciais, somaIntevalo, registros.length);
+
+      // Criamos um span para injetar dentro do DD existente, para não quebrar o layout
+      const spanSaida = document.createElement("span");
+      spanSaida.textContent = "Saída Estimada: " + resultado.hora;
+      spanSaida.setAttribute("class", "chrome-extension");
+      spanSaida.style.backgroundColor = "#8DE2AA";
+      spanSaida.style.borderRadius = "5px";
+      spanSaida.style.padding = "2px 5px";
+      spanSaida.style.fontWeight = "bold";
+      spanSaida.style.fontSize = "0.9em";
+      spanSaida.style.color = "#333";
+      spanSaida.style.display = "inline-block";
+      spanSaida.style.marginTop = "4px";
+
+      if (resultado.status === "limite") {
+        spanSaida.style.backgroundColor = "#FFE9AD";
+        // Dispara notificação se estiver no limite (faltando 15 min ou menos)
+        chrome.runtime.sendMessage({ action: "notificarSaida", hora: resultado.hora });
+      } else if (resultado.status === "atingida") {
+        spanSaida.style.backgroundColor = "#F7B6BC";
+      }
+
+      // Adiciona uma quebra de linha e o span ao final do DD do "Total de Hoje"
+      const br = document.createElement("br");
+      br.setAttribute("class", "chrome-extension");
+      ddTotalHoje.appendChild(br);
+      ddTotalHoje.appendChild(spanSaida);
+
+      console.log("Saída Estimada SUAP: Informações injetadas com sucesso no Total de Hoje!");
+    });
+
+    return true;
   }
 
-  function padZero(num) {
-    return num.toString().padStart(2, "0");
+  if (!injectEstimatedExit()) {
+    const observer = new MutationObserver(() => {
+      if (injectEstimatedExit()) {
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
   }
 }
+
+
+
+
+
+

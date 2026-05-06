@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Saída estimada SUAP",
-  "version": "1.2",
+  "version": "1.3",
   "description": "Extensão para mostrar horário de saída do servidor, local 'batido' e observações na folha de frequência",
   "icons":{
     "257": "favicons/favicon.png"
@@ -13,8 +13,12 @@
   "permissions": [
     "storage",
     "activeTab",
-    "scripting"
+    "scripting",
+    "notifications"
   ],
+  "background": {
+    "service_worker": "scripts/background.js"
+  },
   "content_scripts": [
     {
       "matches": ["https://suap.ifms.edu.br/*"],

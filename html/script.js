@@ -8,46 +8,50 @@ function showOrHidePopup(url) {
     }
 }
 
-window.addEventListener("DOMContentLoaded",  async function() {
+window.addEventListener("DOMContentLoaded", async function() {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     showOrHidePopup(tab.url);
-    await chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        function: getLocalStorage,
-    }).then((injectionResults) => {
-        for (const {frameId, result} of injectionResults) {
-            document.querySelector('#horas-presenciais').value = result[0];
-            if (result[1] === "true") {
-                document.querySelector("#intervalo").setAttribute("checked", "checked");
-            }else{
-                document.querySelector("#intervalo").removeAttribute("checked");
-            }
-          }
-    })
+
+    // Carrega do chrome.storage.local
+    chrome.storage.local.get(["horas-presenciais", "soma-intervalo"], (result) => {
+        if (result["horas-presenciais"]) {
+            document.querySelector('#horas-presenciais').value = result["horas-presenciais"];
+        } else {
+            document.querySelector('#horas-presenciais').value = "8";
+        }
+
+        if (result["soma-intervalo"] === "true" || result["soma-intervalo"] === true) {
+            document.querySelector("#intervalo").checked = true;
+        } else {
+            document.querySelector("#intervalo").checked = false;
+        }
+    });
 });
 
 document.querySelector('form').addEventListener('submit', async function(event) {
     event.preventDefault();
     const horasPresenciais = document.querySelector('#horas-presenciais').value;
     const somaIntervalo = document.querySelector("#intervalo").checked ? "true" : "false";
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
-    chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        function: setLocalStorage,
-        args: [horasPresenciais, somaIntervalo],
+    // Salva no chrome.storage.local
+    chrome.storage.local.set({
+        "horas-presenciais": horasPresenciais,
+        "soma-intervalo": somaIntervalo
+    }, async () => {
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+        
+        // Avisa a aba para atualizar os dados
+        chrome.scripting.executeScript({
+            target: { tabId: tab.id },
+            func: () => {
+                if (typeof main_suap === 'function') {
+                    // Remove o que já existe para forçar re-injeção
+                    const elements = document.getElementsByClassName("chrome-extension");
+                    while(elements.length > 0) elements[0].remove();
+                    main_suap();
+                }
+            }
+        });
+        window.close(); // Fecha o popup após salvar
     });
 });
-
-function getLocalStorage() {
-    return [
-        localStorage.getItem("horas-presenciais"),
-        localStorage.getItem("soma-intervalo")
-    ];
-}
-
-function setLocalStorage(horasPresenciais, somaIntervalo) {
-    localStorage.setItem("horas-presenciais", horasPresenciais);
-    localStorage.setItem("soma-intervalo", somaIntervalo);
-    main_suap();
-}

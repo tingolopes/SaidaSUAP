@@ -1,14 +1,12 @@
-var pathname = window.location.pathname;
+(function() {
+  console.log("Saída Estimada SUAP: Extensão carregada.");
+  var pathname = window.location.pathname;
 
-switch (pathname) {
-  case "/":
-    main_suap();
-    break;
+  if (pathname === "/" || pathname === "/recursos_humanos/") {
+    if (typeof main_suap === "function") main_suap();
+  } else if (pathname.startsWith("/ponto/frequencia_funcionario/")) {
+    if (typeof frequency === "function") frequency();
+  }
+})();
 
-  case "/ponto/frequencia_funcionario/":
-    frequency();
-    break;
 
-  default:
-    break;
-}
